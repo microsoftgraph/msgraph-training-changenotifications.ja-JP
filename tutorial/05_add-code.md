@@ -1,22 +1,24 @@
 <!-- markdownlint-disable MD002 MD041 -->
 
-<span data-ttu-id="c9a21-101">**Startup.cs**ファイルを開き、次の行をコメントにして ssl リダイレクトを無効にします。</span><span class="sxs-lookup"><span data-stu-id="c9a21-101">Open the **Startup.cs** file and comment out the following line to disable ssl redirection.</span></span>
+<span data-ttu-id="8b86f-101">**Startup.cs**ファイルを開き、次の行をコメントにして ssl リダイレクトを無効にします。</span><span class="sxs-lookup"><span data-stu-id="8b86f-101">Open the **Startup.cs** file and comment out the following line to disable ssl redirection.</span></span>
 
 ```csharp
 //app.UseHttpsRedirection();
 ```
 
-### <a name="add-model-classes"></a><span data-ttu-id="c9a21-102">モデルクラスを追加する</span><span class="sxs-lookup"><span data-stu-id="c9a21-102">Add model classes</span></span>
+### <a name="add-model-classes"></a><span data-ttu-id="8b86f-102">モデルクラスを追加する</span><span class="sxs-lookup"><span data-stu-id="8b86f-102">Add model classes</span></span>
 
-<span data-ttu-id="c9a21-103">アプリケーションは、Microsoft Graph との間でのメッセージのシリアル化 (de) に対して、いくつかの新しいモデルクラスを使用します。</span><span class="sxs-lookup"><span data-stu-id="c9a21-103">The application uses several new model classes for (de)serialization of messages to/from the Microsoft Graph.</span></span>
+<span data-ttu-id="8b86f-103">アプリケーションは、Microsoft Graph との間でのメッセージのシリアル化 (de) に対して、いくつかの新しいモデルクラスを使用します。</span><span class="sxs-lookup"><span data-stu-id="8b86f-103">The application uses several new model classes for (de)serialization of messages to/from the Microsoft Graph.</span></span>
 
-<span data-ttu-id="c9a21-104">プロジェクトファイルツリーを右クリックし、[**新しいフォルダー**] を選択します。</span><span class="sxs-lookup"><span data-stu-id="c9a21-104">Right-click in the project file tree and select **New Folder**.</span></span> <span data-ttu-id="c9a21-105">名前の**モデル**を作成する [**モデル**] フォルダーを右クリックして、3つの新しいファイルを追加します。</span><span class="sxs-lookup"><span data-stu-id="c9a21-105">Name it **Models** Right-click the **Models** folder and add three new files:</span></span>
+<span data-ttu-id="8b86f-104">プロジェクトファイルツリーを右クリックし、[**新しいフォルダー**] を選択します。</span><span class="sxs-lookup"><span data-stu-id="8b86f-104">Right-click in the project file tree and select **New Folder**.</span></span> <span data-ttu-id="8b86f-105">**モデル**名</span><span class="sxs-lookup"><span data-stu-id="8b86f-105">Name it **Models**</span></span>
 
-- <span data-ttu-id="c9a21-106">**Notification.cs**</span><span class="sxs-lookup"><span data-stu-id="c9a21-106">**Notification.cs**</span></span>
-- <span data-ttu-id="c9a21-107">**ResourceData.cs**</span><span class="sxs-lookup"><span data-stu-id="c9a21-107">**ResourceData.cs**</span></span>
-- <span data-ttu-id="c9a21-108">**MyConfig.cs**</span><span class="sxs-lookup"><span data-stu-id="c9a21-108">**MyConfig.cs**</span></span>
+<span data-ttu-id="8b86f-106">[**モデル**] フォルダーを右クリックして、3つの新しいファイルを追加します。</span><span class="sxs-lookup"><span data-stu-id="8b86f-106">Right-click the **Models** folder and add three new files:</span></span>
 
-<span data-ttu-id="c9a21-109">**Notification.cs**の内容を次のように置き換えます。</span><span class="sxs-lookup"><span data-stu-id="c9a21-109">Replace the contents of **Notification.cs** with the following:</span></span>
+- <span data-ttu-id="8b86f-107">**Notification.cs**</span><span class="sxs-lookup"><span data-stu-id="8b86f-107">**Notification.cs**</span></span>
+- <span data-ttu-id="8b86f-108">**ResourceData.cs**</span><span class="sxs-lookup"><span data-stu-id="8b86f-108">**ResourceData.cs**</span></span>
+- <span data-ttu-id="8b86f-109">**MyConfig.cs**</span><span class="sxs-lookup"><span data-stu-id="8b86f-109">**MyConfig.cs**</span></span>
+
+<span data-ttu-id="8b86f-110">**Notification.cs**の内容を次のように置き換えます。</span><span class="sxs-lookup"><span data-stu-id="8b86f-110">Replace the contents of **Notification.cs** with the following:</span></span>
 
 ```csharp
 using Newtonsoft.Json;
@@ -60,7 +62,7 @@ namespace msgraphapp.Models
 }
 ```
 
-<span data-ttu-id="c9a21-110">**ResourceData.cs**の内容を次のように置き換えます。</span><span class="sxs-lookup"><span data-stu-id="c9a21-110">Replace the contents of **ResourceData.cs** with the following:</span></span>
+<span data-ttu-id="8b86f-111">**ResourceData.cs**の内容を次のように置き換えます。</span><span class="sxs-lookup"><span data-stu-id="8b86f-111">Replace the contents of **ResourceData.cs** with the following:</span></span>
 
 ```csharp
 using Newtonsoft.Json;
@@ -88,7 +90,7 @@ namespace msgraphapp.Models
 }
 ```
 
-<span data-ttu-id="c9a21-111">**MyConfig.cs**の内容を次のように置き換えます。</span><span class="sxs-lookup"><span data-stu-id="c9a21-111">Replace the contents of **MyConfig.cs** with the following:</span></span>
+<span data-ttu-id="8b86f-112">**MyConfig.cs**の内容を次のように置き換えます。</span><span class="sxs-lookup"><span data-stu-id="8b86f-112">Replace the contents of **MyConfig.cs** with the following:</span></span>
 
 ```csharp
 namespace msgraphapp
@@ -103,7 +105,7 @@ namespace msgraphapp
 }
 ```
 
-<span data-ttu-id="c9a21-112">**Startup.cs**ファイルを開き、コンテンツを次のように置き換えます。</span><span class="sxs-lookup"><span data-stu-id="c9a21-112">Open the **Startup.cs** file and replace the contents with the following.</span></span>
+<span data-ttu-id="8b86f-113">**Startup.cs**ファイルを開きます。</span><span class="sxs-lookup"><span data-stu-id="8b86f-113">Open the **Startup.cs** file.</span></span> <span data-ttu-id="8b86f-114">メソッド`ConfigureServices()`メソッドを見つけ &、次のコードに置き換えます。</span><span class="sxs-lookup"><span data-stu-id="8b86f-114">Locate the method `ConfigureServices()` method & replace it with the following code:</span></span>
 
 ```csharp
 public void ConfigureServices(IServiceCollection services)
@@ -115,7 +117,7 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 
-<span data-ttu-id="c9a21-113">**Appsettings**ファイルを開き、コンテンツを次のように置き換えます。</span><span class="sxs-lookup"><span data-stu-id="c9a21-113">Open the **appsettings.json** file and replace the content the following.</span></span>
+<span data-ttu-id="8b86f-115">**Appsettings**ファイルを開き、コンテンツを次のように置き換えます。</span><span class="sxs-lookup"><span data-stu-id="8b86f-115">Open the **appsettings.json** file and replace the content the following.</span></span>
 
 ```json
 {
@@ -134,19 +136,19 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 
-<span data-ttu-id="c9a21-114">次の変数を、前の手順でコピーした値に置き換えます。</span><span class="sxs-lookup"><span data-stu-id="c9a21-114">Replace the following variables with the values you copied earlier:</span></span>
+<span data-ttu-id="8b86f-116">次の変数を、前の手順でコピーした値に置き換えます。</span><span class="sxs-lookup"><span data-stu-id="8b86f-116">Replace the following variables with the values you copied earlier:</span></span>
 
-    - <span data-ttu-id="c9a21-115">`<NGROK URL>`以前にコピーした https ngrok url に設定する必要があります。</span><span class="sxs-lookup"><span data-stu-id="c9a21-115">`<NGROK URL>` should be set to the https ngrok url you copied earlier.</span></span>
-    - <span data-ttu-id="c9a21-116">`<TENANT ID>`たとえば、Office 365 テナント id である必要があります。</span><span class="sxs-lookup"><span data-stu-id="c9a21-116">`<TENANT ID>` should be your Office 365 tenant id, for example.</span></span> <span data-ttu-id="c9a21-117">**contoso.onmicrosoft.com**。</span><span class="sxs-lookup"><span data-stu-id="c9a21-117">**contoso.onmicrosoft.com**.</span></span>
-    - <span data-ttu-id="c9a21-118">`<APP ID>`、 `<APP SECRET>`アプリケーション登録の作成時に前にコピーしたアプリケーション id とシークレットである必要があります。</span><span class="sxs-lookup"><span data-stu-id="c9a21-118">`<APP ID>` and `<APP SECRET>` should be the application id and secret you copied earlier when you created the application registration.</span></span>
+- <span data-ttu-id="8b86f-117">`<NGROK URL>`以前にコピーした https ngrok url に設定する必要があります。</span><span class="sxs-lookup"><span data-stu-id="8b86f-117">`<NGROK URL>` should be set to the https ngrok url you copied earlier.</span></span>
+- <span data-ttu-id="8b86f-118">`<TENANT ID>`Office 365 テナント id である必要があります。例: **contoso.onmicrosoft.com**。</span><span class="sxs-lookup"><span data-stu-id="8b86f-118">`<TENANT ID>` should be your Office 365 tenant id, for example: **contoso.onmicrosoft.com**.</span></span>
+- <span data-ttu-id="8b86f-119">`<APP ID>`、 `<APP SECRET>`アプリケーション登録の作成時に前にコピーしたアプリケーション id とシークレットである必要があります。</span><span class="sxs-lookup"><span data-stu-id="8b86f-119">`<APP ID>` and `<APP SECRET>` should be the application id and secret you copied earlier when you created the application registration.</span></span>
 
-### <a name="add-notification-controller"></a><span data-ttu-id="c9a21-119">通知コントローラーの追加</span><span class="sxs-lookup"><span data-stu-id="c9a21-119">Add notification controller</span></span>
+### <a name="add-notification-controller"></a><span data-ttu-id="8b86f-120">通知コントローラーの追加</span><span class="sxs-lookup"><span data-stu-id="8b86f-120">Add notification controller</span></span>
 
-<span data-ttu-id="c9a21-120">アプリケーションには、サブスクリプションと通知を処理するための新しいコントローラーが必要です。</span><span class="sxs-lookup"><span data-stu-id="c9a21-120">The application requires a new controller to process the subscription and notification.</span></span>
+<span data-ttu-id="8b86f-121">アプリケーションには、サブスクリプションと通知を処理するための新しいコントローラーが必要です。</span><span class="sxs-lookup"><span data-stu-id="8b86f-121">The application requires a new controller to process the subscription and notification.</span></span>
 
-<span data-ttu-id="c9a21-121">`Controllers`フォルダーを右クリックし、[**新しいファイル**] を選択して、コントローラーに**NotificationsController.cs**という名前を指定します。</span><span class="sxs-lookup"><span data-stu-id="c9a21-121">Right-click the `Controllers` folder, select **New File**, and name the controller **NotificationsController.cs**.</span></span>
+<span data-ttu-id="8b86f-122">`Controllers`フォルダーを右クリックし、[**新しいファイル**] を選択して、コントローラーに**NotificationsController.cs**という名前を指定します。</span><span class="sxs-lookup"><span data-stu-id="8b86f-122">Right-click the `Controllers` folder, select **New File**, and name the controller **NotificationsController.cs**.</span></span>
 
-<span data-ttu-id="c9a21-122">**NotificationController.cs**の内容を次のように置き換えます。</span><span class="sxs-lookup"><span data-stu-id="c9a21-122">Replace the contents of **NotificationController.cs** with the following:</span></span>
+<span data-ttu-id="8b86f-123">**NotificationController.cs**の内容を次のコードに置き換えます。</span><span class="sxs-lookup"><span data-stu-id="8b86f-123">Replace the contents of **NotificationController.cs** with the following code:</span></span>
 
 ```csharp
 using System;
@@ -244,25 +246,21 @@ namespace msgraphapp.Controllers
 
     private async Task<string> GetAccessToken()
     {
-        ClientCredential clientCredentials = new ClientCredential(secret: config.AppSecret);
+      IConfidentialClientApplication app = ConfidentialClientApplicationBuilder.Create(config.AppId)
+        .WithClientSecret(config.AppSecret)
+        .WithAuthority($"https://login.microsoftonline.com/{config.TenantId}")
+        .WithRedirectUri("https://daemon")
+        .Build();
 
-        var app = new ConfidentialClientApplication(
-            clientId: config.AppId,
-            authority: $"https://login.microsoftonline.com/{config.TenantId}",
-            redirectUri: "https://daemon",
-            clientCredential: clientCredentials,
-            userTokenCache: null,
-            appTokenCache: new TokenCache()
-        );
+      string[] scopes = new string[] { "https://graph.microsoft.com/.default" };
 
-        string[] scopes = new string[] { "https://graph.microsoft.com/.default" };
+      var result = await app.AcquireTokenForClient(scopes).ExecuteAsync();
 
-        var result = await app.AcquireTokenForClientAsync(scopes);
-
-        return result.AccessToken;
+      return result.AccessToken;
     }
+
   }
 }
 ```
 
-<span data-ttu-id="c9a21-123">すべてのファイルを**保存**します。</span><span class="sxs-lookup"><span data-stu-id="c9a21-123">**Save** all files.</span></span>
+<span data-ttu-id="8b86f-124">すべてのファイルを**保存**します。</span><span class="sxs-lookup"><span data-stu-id="8b86f-124">**Save** all files.</span></span>

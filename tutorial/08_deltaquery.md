@@ -1,44 +1,13 @@
 <!-- markdownlint-disable MD002 MD041 -->
 
-### <a name="query-for-changes"></a><span data-ttu-id="ce679-101">変更のクエリ</span><span class="sxs-lookup"><span data-stu-id="ce679-101">Query for changes</span></span>
+### <a name="query-for-changes"></a><span data-ttu-id="1b689-101">変更のクエリ</span><span class="sxs-lookup"><span data-stu-id="1b689-101">Query for changes</span></span>
 
-<span data-ttu-id="ce679-102">Microsoft Graph では、最後に呼び出した後に、特定のリソースに対する変更を照会することができます。</span><span class="sxs-lookup"><span data-stu-id="ce679-102">Microsoft Graph offers the ability to query for changes to a particular resource since you last called it.</span></span> <span data-ttu-id="ce679-103">これを変更通知と組み合わせて使用することは、リソースへの変更を見逃さないようにするための堅牢な方法です。</span><span class="sxs-lookup"><span data-stu-id="ce679-103">Using this combined with Change Notifications is a robust method for ensuring you don't miss any changes to the resources.</span></span>
+<span data-ttu-id="1b689-102">Microsoft Graph では、最後に呼び出した後に、特定のリソースに対する変更を照会することができます。</span><span class="sxs-lookup"><span data-stu-id="1b689-102">Microsoft Graph offers the ability to query for changes to a particular resource since you last called it.</span></span> <span data-ttu-id="1b689-103">このオプションを変更通知と組み合わせて使用すると、リソースへの変更を見逃さないようにするための堅牢なパターンが有効になります。</span><span class="sxs-lookup"><span data-stu-id="1b689-103">Using this option, combined with Change Notifications, enables a robust pattern for ensuring you don't miss any changes to the resources.</span></span>
 
-<span data-ttu-id="ce679-104">**NotificationsController.cs**を開き、 `Post`メソッドを次のコードに置き換えます。</span><span class="sxs-lookup"><span data-stu-id="ce679-104">Open **NotificationsController.cs** and replace the `Post` method with the following code:</span></span>
+<span data-ttu-id="1b689-104">次のコントローラーを見つけて開きます。 **Controllers > NotificationsController.cs**。</span><span class="sxs-lookup"><span data-stu-id="1b689-104">Locate and open the following controller: **Controllers > NotificationsController.cs**.</span></span>
+<span data-ttu-id="1b689-105">次のコードを既存`NotificationsController`のクラスに追加します。</span><span class="sxs-lookup"><span data-stu-id="1b689-105">Add the following code to the existing `NotificationsController` class.</span></span>
 
-```csharp
-public ActionResult<string> Post([FromQuery]string validationToken = null)
-{
-  // handle validation
-  if(!string.IsNullOrEmpty(validationToken))
-  {
-    Console.WriteLine($"Received Token: '{validationToken}'");
-    return Ok(validationToken);
-  }
-
-  // handle notifications
-  using (StreamReader reader = new StreamReader(Request.Body))
-  {
-    string content = reader.ReadToEnd();
-
-    Console.WriteLine(content);
-
-    var notifications = JsonConvert.DeserializeObject<Notifications>(content);
-
-    foreach(var notification in notifications.Items)
-    {
-      Console.WriteLine($"Received notification: '{notification.Resource}', {notification.ResourceData?.Id}");
-    }
-  }
-
-  // use deltaquery to query for all updates
-  CheckForUpdates();
-
-  return Ok();
-}
-```
-
-<span data-ttu-id="ce679-105">通知`Post`を受信した`CheckForUpdates`ときにメソッドが呼び出されるようになりました。</span><span class="sxs-lookup"><span data-stu-id="ce679-105">The `Post` method will now call `CheckForUpdates` when a notification is received.</span></span> <span data-ttu-id="ce679-106">メソッドの`Post`下に、次の2つの新しいメソッドを追加します。</span><span class="sxs-lookup"><span data-stu-id="ce679-106">Below the `Post` method add the following two new methods:</span></span>
+<span data-ttu-id="1b689-106">このコードには、新しいメソッド`CheckForUpdates()`が含まれています。これにより、デルタ url を使用して Microsoft Graph を呼び出し、 `deltalink`結果の最後のページで新しい結果が見つかるまで、結果をページングします。</span><span class="sxs-lookup"><span data-stu-id="1b689-106">This code includes a new method, `CheckForUpdates()`, that will call the Microsoft Graph using the delta url and then pages through the results until it finds a new `deltalink` on the final page of results.</span></span> <span data-ttu-id="1b689-107">別の通知がトリガーされたときに、コードが再度通知されるまで、その url をメモリに格納します。</span><span class="sxs-lookup"><span data-stu-id="1b689-107">It stores the url in memory until the code is notified again when another notification is triggered.</span></span>
 
 ```csharp
 private static object DeltaLink = null;
@@ -57,15 +26,15 @@ private void CheckForUpdates()
   // go through all of the pages so that we can get the delta link on the last page.
   while (users.NextPageRequest != null)
   {
-      users = users.NextPageRequest.GetAsync().Result;
-      OutputUsers(users);
+    users = users.NextPageRequest.GetAsync().Result;
+    OutputUsers(users);
   }
 
   object deltaLink;
 
   if (users.AdditionalData.TryGetValue("@odata.deltaLink", out deltaLink))
   {
-      DeltaLink = deltaLink;
+    DeltaLink = deltaLink;
   }
 }
 
@@ -103,25 +72,63 @@ private IUserDeltaCollectionPage GetUsers(GraphServiceClient graphClient, object
 }
 ```
 
-<span data-ttu-id="ce679-107">この`CheckForUpdates`メソッドは、デルタ url を使用してグラフを呼び出し、結果の最後のページで`deltalink`新しいものが見つかるまで結果をページングします。</span><span class="sxs-lookup"><span data-stu-id="ce679-107">The `CheckForUpdates` method calls the graph using the delta url and then pages through the results until it finds a new `deltalink` on the final page of results.</span></span> <span data-ttu-id="ce679-108">別の通知がトリガーされたときに、コードが再度通知されるまで、その url をメモリに格納します。</span><span class="sxs-lookup"><span data-stu-id="ce679-108">It stores the url in memory until the code is notified again when another notification is triggered.</span></span>
+<span data-ttu-id="1b689-108">既存`Post()`のメソッドを見つけて、次のコードに置き換えます。</span><span class="sxs-lookup"><span data-stu-id="1b689-108">Locate the existing `Post()` method and replace it with the following code:</span></span>
 
-<span data-ttu-id="ce679-109">すべてのファイルを**保存**します。</span><span class="sxs-lookup"><span data-stu-id="ce679-109">**Save** all files.</span></span>
+```csharp
+public ActionResult<string> Post([FromQuery]string validationToken = null)
+{
+  // handle validation
+  if(!string.IsNullOrEmpty(validationToken))
+  {
+    Console.WriteLine($"Received Token: '{validationToken}'");
+    return Ok(validationToken);
+  }
 
-<span data-ttu-id="ce679-110">[デバッグ **> デバッグ開始**] を選択して、アプリケーションを実行します。</span><span class="sxs-lookup"><span data-stu-id="ce679-110">Select **Debug > Start debugging** to run the application.</span></span> <span data-ttu-id="ce679-111">アプリケーションをビルドすると、ブラウザーウィンドウが404ページに開かれます。</span><span class="sxs-lookup"><span data-stu-id="ce679-111">After building the application a browser window will open to a 404 page.</span></span> <span data-ttu-id="ce679-112">これは、アプリケーションが web ページではなく API であるため、ok です。</span><span class="sxs-lookup"><span data-stu-id="ce679-112">This is ok since our application is an API and not a webpage.</span></span>
+  // handle notifications
+  using (StreamReader reader = new StreamReader(Request.Body))
+  {
+    string content = reader.ReadToEnd();
 
-<span data-ttu-id="ce679-113">ユーザーの変更通知をサブスクライブするには、次の`http://localhost:5000/api/notifications`url に移動します。</span><span class="sxs-lookup"><span data-stu-id="ce679-113">To subscribe for change notifications for users navigate to the following url `http://localhost:5000/api/notifications`.</span></span>
+    Console.WriteLine(content);
 
-<span data-ttu-id="ce679-114">ブラウザーを開き、 [Microsoft 365 管理センター](https://admin.microsoft.com/AdminPortal)にアクセスします。</span><span class="sxs-lookup"><span data-stu-id="ce679-114">Open a browser and visit the [Microsoft 365 admin center](https://admin.microsoft.com/AdminPortal).</span></span> <span data-ttu-id="ce679-115">管理者アカウントを使用してサインインします。</span><span class="sxs-lookup"><span data-stu-id="ce679-115">Sign-in using an administrator account.</span></span> <span data-ttu-id="ce679-116">[**ユーザー > アクティブユーザー**] を選択します。</span><span class="sxs-lookup"><span data-stu-id="ce679-116">Select **Users > Active users**.</span></span> <span data-ttu-id="ce679-117">アクティブなユーザーを選択し、**連絡先情報**として [**編集**] を選択します。</span><span class="sxs-lookup"><span data-stu-id="ce679-117">Select an active user and select **Edit** for their **Contact information**.</span></span> <span data-ttu-id="ce679-118">新しい番号を使用して**携帯電話**の値を更新し、[**保存**] を選択します。</span><span class="sxs-lookup"><span data-stu-id="ce679-118">Update the **Mobile phone** value with a new number and Select **Save**.</span></span>
+    var notifications = JsonConvert.DeserializeObject<Notifications>(content);
 
-![ユーザーの詳細のスクリーンショット](./images/10.png)
+    foreach(var notification in notifications.Items)
+    {
+      Console.WriteLine($"Received notification: '{notification.Resource}', {notification.ResourceData?.Id}");
+    }
+  }
 
-<span data-ttu-id="ce679-120">**デバッグコンソール**で次のように通知が受信されるまで待機します。</span><span class="sxs-lookup"><span data-stu-id="ce679-120">Wait for the notification to be received as indicated in the **DEBUG CONSOLE** as follows:</span></span>
+  // use deltaquery to query for all updates
+  CheckForUpdates();
+
+  return Ok();
+}
+```
+
+<span data-ttu-id="1b689-109">通知`Post`を受信した`CheckForUpdates`ときにメソッドが呼び出されるようになりました。</span><span class="sxs-lookup"><span data-stu-id="1b689-109">The `Post` method will now call `CheckForUpdates` when a notification is received.</span></span> <span data-ttu-id="1b689-110">メソッドの`Post`下に、次の2つの新しいメソッドを追加します。</span><span class="sxs-lookup"><span data-stu-id="1b689-110">Below the `Post` method add the following two new methods:</span></span>
+
+<span data-ttu-id="1b689-111">すべてのファイルを**保存**します。</span><span class="sxs-lookup"><span data-stu-id="1b689-111">**Save** all files.</span></span>
+
+### <a name="test-your-changes"></a><span data-ttu-id="1b689-112">変更内容をテストします。</span><span class="sxs-lookup"><span data-stu-id="1b689-112">Test your changes:</span></span>
+
+<span data-ttu-id="1b689-113">Visual Studio Code 内で、[デバッグ **> デバッグ開始**] を選択して、アプリケーションを実行します。</span><span class="sxs-lookup"><span data-stu-id="1b689-113">Within Visual Studio Code, select **Debug > Start debugging** to run the application.</span></span>
+<span data-ttu-id="1b689-114">次の url に移動**http://localhost:5000/api/notifications**します。</span><span class="sxs-lookup"><span data-stu-id="1b689-114">Navigate to the following url: **http://localhost:5000/api/notifications**.</span></span> <span data-ttu-id="1b689-115">これにより、新しいサブスクリプションが登録されます。</span><span class="sxs-lookup"><span data-stu-id="1b689-115">This will register a new subscription.</span></span>
+
+<span data-ttu-id="1b689-116">ブラウザーを開き、 [Microsoft 365 管理センター (https://admin.microsoft.com/AdminPortal)](https://admin.microsoft.com/AdminPortal)) に移動します。</span><span class="sxs-lookup"><span data-stu-id="1b689-116">Open a browser and navigate to the [Microsoft 365 admin center (https://admin.microsoft.com/AdminPortal)](https://admin.microsoft.com/AdminPortal).</span></span>
+
+1. <span data-ttu-id="1b689-117">ログインするように求められた場合は、管理者アカウントを使用してサインインします。</span><span class="sxs-lookup"><span data-stu-id="1b689-117">If prompted to login, sign-in using an admin account.</span></span>
+1. <span data-ttu-id="1b689-118">[**ユーザー > アクティブユーザー**] を選択します。</span><span class="sxs-lookup"><span data-stu-id="1b689-118">Select **Users > Active users**.</span></span> 
+1. <span data-ttu-id="1b689-119">アクティブなユーザーを選択し、**連絡先情報**として [**編集**] を選択します。</span><span class="sxs-lookup"><span data-stu-id="1b689-119">Select an active user and select **Edit** for their **Contact information**.</span></span> 
+1. <span data-ttu-id="1b689-120">新しい番号を使用して**携帯電話**の値を更新し、[**保存**] を選択します。</span><span class="sxs-lookup"><span data-stu-id="1b689-120">Update the **Mobile phone** value with a new number and Select **Save**.</span></span>
+
+<span data-ttu-id="1b689-121">Visual Studio Code**デバッグコンソール**に示されているように、通知が受信されるまで待機します。</span><span class="sxs-lookup"><span data-stu-id="1b689-121">Wait for the notification to be received as indicated in the Visual Studio Code **Debug Console**:</span></span>
 
 ```shell
 Received notification: 'Users/7a7fded6-0269-42c2-a0be-512d58da4463', 7a7fded6-0269-42c2-a0be-512d58da4463
 ```
 
-<span data-ttu-id="ce679-121">アプリケーションは、グラフを使用してデルタクエリを開始し、すべてのユーザーを取得し、その詳細の一部をコンソール出力にログアウトさせるようになります。</span><span class="sxs-lookup"><span data-stu-id="ce679-121">The application will now initiate a delta query with the graph to get all the users and log out some of their details to the console output.</span></span>
+<span data-ttu-id="1b689-122">アプリケーションは、グラフを使用してデルタクエリを開始し、すべてのユーザーを取得し、その詳細の一部をコンソール出力にログアウトさせるようになります。</span><span class="sxs-lookup"><span data-stu-id="1b689-122">The application will now initiate a delta query with the graph to get all the users and log out some of their details to the console output.</span></span>
 
 ```shell
 User: 19e429d2-541a-4e0b-9873-6dff9f48fabe, Allan Deyoung
@@ -156,12 +163,12 @@ User: d4e3a3e0-72e9-41a6-9538-c23e10a16122,   Removed?:deleted
 Got deltalink
 ```
 
-<span data-ttu-id="ce679-122">ユーザー管理ポータルで、再度ユーザーを編集し、別の携帯電話番号を使用してもう一度**保存**します。</span><span class="sxs-lookup"><span data-stu-id="ce679-122">In the user management portal edit the user again and **Save** again using a different mobile phone number.</span></span>
+<span data-ttu-id="1b689-123">Microsoft 365 管理ポータルで、ユーザーの編集と再**保存**のプロセスを繰り返します。</span><span class="sxs-lookup"><span data-stu-id="1b689-123">In the Microsoft 365 Admin Portal, repeat the process of editing a user and **Save** again.</span></span>
 
-<span data-ttu-id="ce679-123">アプリケーションは別の通知を受信し、最後に受信したデルタリンクを使用して、再びグラフを照会します。</span><span class="sxs-lookup"><span data-stu-id="ce679-123">The application will receive another notification and will query the graph again using the last delta link it received.</span></span> <span data-ttu-id="ce679-124">ただし、今回は、変更されたユーザーのみが結果で返されることに注意してください。</span><span class="sxs-lookup"><span data-stu-id="ce679-124">However, this time you will notice that only the modified user was returned in the results.</span></span>
+<span data-ttu-id="1b689-124">アプリケーションは別の通知を受信し、最後に受信したデルタリンクを使用して、再びグラフを照会します。</span><span class="sxs-lookup"><span data-stu-id="1b689-124">The application will receive another notification and will query the graph again using the last delta link it received.</span></span> <span data-ttu-id="1b689-125">ただし、今回は、変更されたユーザーのみが結果で返されることに注意してください。</span><span class="sxs-lookup"><span data-stu-id="1b689-125">However, this time you will notice that only the modified user was returned in the results.</span></span>
 
 ```shell
 User: 7a7fded6-0269-42c2-a0be-512d58da4463, Adele Vance
 ```
 
-<span data-ttu-id="ce679-125">このような通知とデルタクエリの組み合わせを使用することで、リソースに対する更新を見落としないことが保証されます。</span><span class="sxs-lookup"><span data-stu-id="ce679-125">Using this combination of notifications with delta query you can be assured you wont miss any updates to a resource.</span></span> <span data-ttu-id="ce679-126">一時的な接続の問題により通知が失われることがありますが、アプリケーションが次回通知を受け取ると、最後に成功したクエリ以降のすべての変更が取得されます。</span><span class="sxs-lookup"><span data-stu-id="ce679-126">Notifications may be missed due to transient connection issues, however the next time your application gets a notification it will pick up all the changes since the last successful query.</span></span>
+<span data-ttu-id="1b689-126">このような通知とデルタクエリの組み合わせを使用することで、リソースに対する更新を見落としないことが保証されます。</span><span class="sxs-lookup"><span data-stu-id="1b689-126">Using this combination of notifications with delta query you can be assured you wont miss any updates to a resource.</span></span> <span data-ttu-id="1b689-127">一時的な接続の問題により通知が失われることがありますが、アプリケーションが次回通知を受け取ると、最後に成功したクエリ以降のすべての変更が取得されます。</span><span class="sxs-lookup"><span data-stu-id="1b689-127">Notifications may be missed due to transient connection issues, however the next time your application gets a notification it will pick up all the changes since the last successful query.</span></span>
