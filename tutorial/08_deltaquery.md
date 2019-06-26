@@ -2,43 +2,12 @@
 
 ### <a name="query-for-changes"></a>変更のクエリ
 
-Microsoft Graph では、最後に呼び出した後に、特定のリソースに対する変更を照会することができます。 これを変更通知と組み合わせて使用することは、リソースへの変更を見逃さないようにするための堅牢な方法です。
+Microsoft Graph では、最後に呼び出した後に、特定のリソースに対する変更を照会することができます。 このオプションを変更通知と組み合わせて使用すると、リソースへの変更を見逃さないようにするための堅牢なパターンが有効になります。
 
-**NotificationsController.cs**を開き、 `Post`メソッドを次のコードに置き換えます。
+次のコントローラーを見つけて開きます。 **Controllers > NotificationsController.cs**。
+次のコードを既存`NotificationsController`のクラスに追加します。
 
-```csharp
-public ActionResult<string> Post([FromQuery]string validationToken = null)
-{
-  // handle validation
-  if(!string.IsNullOrEmpty(validationToken))
-  {
-    Console.WriteLine($"Received Token: '{validationToken}'");
-    return Ok(validationToken);
-  }
-
-  // handle notifications
-  using (StreamReader reader = new StreamReader(Request.Body))
-  {
-    string content = reader.ReadToEnd();
-
-    Console.WriteLine(content);
-
-    var notifications = JsonConvert.DeserializeObject<Notifications>(content);
-
-    foreach(var notification in notifications.Items)
-    {
-      Console.WriteLine($"Received notification: '{notification.Resource}', {notification.ResourceData?.Id}");
-    }
-  }
-
-  // use deltaquery to query for all updates
-  CheckForUpdates();
-
-  return Ok();
-}
-```
-
-通知`Post`を受信した`CheckForUpdates`ときにメソッドが呼び出されるようになりました。 メソッドの`Post`下に、次の2つの新しいメソッドを追加します。
+このコードには、新しいメソッド`CheckForUpdates()`が含まれています。これにより、デルタ url を使用して Microsoft Graph を呼び出し、 `deltalink`結果の最後のページで新しい結果が見つかるまで、結果をページングします。 別の通知がトリガーされたときに、コードが再度通知されるまで、その url をメモリに格納します。
 
 ```csharp
 private static object DeltaLink = null;
@@ -57,15 +26,15 @@ private void CheckForUpdates()
   // go through all of the pages so that we can get the delta link on the last page.
   while (users.NextPageRequest != null)
   {
-      users = users.NextPageRequest.GetAsync().Result;
-      OutputUsers(users);
+    users = users.NextPageRequest.GetAsync().Result;
+    OutputUsers(users);
   }
 
   object deltaLink;
 
   if (users.AdditionalData.TryGetValue("@odata.deltaLink", out deltaLink))
   {
-      DeltaLink = deltaLink;
+    DeltaLink = deltaLink;
   }
 }
 
@@ -103,19 +72,57 @@ private IUserDeltaCollectionPage GetUsers(GraphServiceClient graphClient, object
 }
 ```
 
-この`CheckForUpdates`メソッドは、デルタ url を使用してグラフを呼び出し、結果の最後のページで`deltalink`新しいものが見つかるまで結果をページングします。 別の通知がトリガーされたときに、コードが再度通知されるまで、その url をメモリに格納します。
+既存`Post()`のメソッドを見つけて、次のコードに置き換えます。
+
+```csharp
+public ActionResult<string> Post([FromQuery]string validationToken = null)
+{
+  // handle validation
+  if(!string.IsNullOrEmpty(validationToken))
+  {
+    Console.WriteLine($"Received Token: '{validationToken}'");
+    return Ok(validationToken);
+  }
+
+  // handle notifications
+  using (StreamReader reader = new StreamReader(Request.Body))
+  {
+    string content = reader.ReadToEnd();
+
+    Console.WriteLine(content);
+
+    var notifications = JsonConvert.DeserializeObject<Notifications>(content);
+
+    foreach(var notification in notifications.Items)
+    {
+      Console.WriteLine($"Received notification: '{notification.Resource}', {notification.ResourceData?.Id}");
+    }
+  }
+
+  // use deltaquery to query for all updates
+  CheckForUpdates();
+
+  return Ok();
+}
+```
+
+通知`Post`を受信した`CheckForUpdates`ときにメソッドが呼び出されるようになりました。 メソッドの`Post`下に、次の2つの新しいメソッドを追加します。
 
 すべてのファイルを**保存**します。
 
-[デバッグ **> デバッグ開始**] を選択して、アプリケーションを実行します。 アプリケーションをビルドすると、ブラウザーウィンドウが404ページに開かれます。 これは、アプリケーションが web ページではなく API であるため、ok です。
+### <a name="test-your-changes"></a>変更内容をテストします。
 
-ユーザーの変更通知をサブスクライブするには、次の`http://localhost:5000/api/notifications`url に移動します。
+Visual Studio Code 内で、[デバッグ **> デバッグ開始**] を選択して、アプリケーションを実行します。
+次の url に移動**http://localhost:5000/api/notifications**します。 これにより、新しいサブスクリプションが登録されます。
 
-ブラウザーを開き、 [Microsoft 365 管理センター](https://admin.microsoft.com/AdminPortal)にアクセスします。 管理者アカウントを使用してサインインします。 [**ユーザー > アクティブユーザー**] を選択します。 アクティブなユーザーを選択し、**連絡先情報**として [**編集**] を選択します。 新しい番号を使用して**携帯電話**の値を更新し、[**保存**] を選択します。
+ブラウザーを開き、 [Microsoft 365 管理センター (https://admin.microsoft.com/AdminPortal)](https://admin.microsoft.com/AdminPortal)) に移動します。
 
-![ユーザーの詳細のスクリーンショット](./images/10.png)
+1. ログインするように求められた場合は、管理者アカウントを使用してサインインします。
+1. [**ユーザー > アクティブユーザー**] を選択します。 
+1. アクティブなユーザーを選択し、**連絡先情報**として [**編集**] を選択します。 
+1. 新しい番号を使用して**携帯電話**の値を更新し、[**保存**] を選択します。
 
-**デバッグコンソール**で次のように通知が受信されるまで待機します。
+Visual Studio Code**デバッグコンソール**に示されているように、通知が受信されるまで待機します。
 
 ```shell
 Received notification: 'Users/7a7fded6-0269-42c2-a0be-512d58da4463', 7a7fded6-0269-42c2-a0be-512d58da4463
@@ -156,7 +163,7 @@ User: d4e3a3e0-72e9-41a6-9538-c23e10a16122,   Removed?:deleted
 Got deltalink
 ```
 
-ユーザー管理ポータルで、再度ユーザーを編集し、別の携帯電話番号を使用してもう一度**保存**します。
+Microsoft 365 管理ポータルで、ユーザーの編集と再**保存**のプロセスを繰り返します。
 
 アプリケーションは別の通知を受信し、最後に受信したデルタリンクを使用して、再びグラフを照会します。 ただし、今回は、変更されたユーザーのみが結果で返されることに注意してください。
 

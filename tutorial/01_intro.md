@@ -7,10 +7,20 @@
 
 ## <a name="prerequisites"></a>前提条件
 
-このチュートリアルを開始する前に、開発用コンピューターに[.Net Core 2.2 SDK](https://dotnet.microsoft.com/download)と[Visual Studio コード](https://code.visualstudio.com/)をインストールしておく必要があります。 インストールされていない場合は、「ダウンロードオプション」の前のリンクを参照してください。
+このチュートリアルを開始する前に、開発用コンピューターに[.Net Core 2.2 SDK](https://dotnet.microsoft.com/download)と[Visual Studio コード](https://code.visualstudio.com/)をインストールしておく必要があります。
 
 > [!NOTE]
 > このチュートリアルは、.NET コアバージョン2.2 で記述されています。 このガイドの手順は、他のバージョンでは動作しますが、テストされていません。
+
+## <a name="watch-the-tutorial"></a>チュートリアルを見る
+
+このモジュールは、Office 開発 YouTube チャネルで記録されており、利用できます。
+
+<!-- markdownlint-disable MD033 MD034 -->
+<br/>
+
+> [!VIDEO https://www.youtube-nocookie.com/embed/fThiCZmIcMQ]
+<!-- markdownlint-enable MD033 MD034 -->
 
 ## <a name="feedback"></a>フィードバック
 

@@ -16,21 +16,23 @@
 
 ## <a name="watch-the-module"></a>モジュールを見る
 
-このモジュールは、Office 開発の YouTube チャンネルで提供されています。[変更通知と Microsoft Graph での変更履歴](https://youtu.be/MvJ15BHTdHA)を記録します。
+このモジュールは、Office 開発の YouTube チャンネルで提供されています。[変更通知と Microsoft Graph での変更履歴](https://youtu.be/fThiCZmIcMQ)を記録します。
 
 ## <a name="contributors"></a>多様
 
-| ロール                | 作成者 (s)                                               |
-| -------------------- | ------------------------------------------------------- |
-| ラボのマニュアル/スライド | Andrew Connell (Microsoft MVP、Voitanos) @andrewconnell |
-| スポンサー/サポート    | Jeremy Thake (Microsoft) @jthake                        |
+|        ロール         |                                       作成者 (s)                                       |
+| -------------------- | ------------------------------------------------------------------------------------- |
+| ラボのマニュアル/スライド | Andrew Connell (Microsoft MVP、Voitanos) [@andrewconnell](//github.com/andrewconnell) |
+| スポンサー/サポート    | Jeremy Thake (Microsoft) [@jthake](//github.com/jthake)                               |
 
 ## <a name="version-history"></a>バージョン履歴
 
-| バージョン | 日付           | コメント             |
-| ------- | -------------- | -------------------- |
-| 1.1     | 2019 年 4 月 9 日 | Screencast link が追加されました |
-| 1.0     | 2019 年 3 月 14 日 | 送信された新しいモジュール |
+| バージョン |      日付      |                     コメント                     |
+| ------- | -------------- | ------------------------------------------------ |
+| 1.3     | 2019年6月18日  | 更新された readme を screencast レコーディングに更新しました |
+| 1.2     | 2019年5月30日   | Fy2019Q4 コンテンツの更新                         |
+| 1.1     | 2019 年 4 月 9 日  | Screencast link が追加されました                            |
+| 1.0     | 2019 年 3 月 14 日 | 送信された新しいモジュール                             |
 
 ## <a name="disclaimer"></a>免責事項
 

@@ -10,7 +10,9 @@
 
 アプリケーションは、Microsoft Graph との間でのメッセージのシリアル化 (de) に対して、いくつかの新しいモデルクラスを使用します。
 
-プロジェクトファイルツリーを右クリックし、[**新しいフォルダー**] を選択します。 名前の**モデル**を作成する [**モデル**] フォルダーを右クリックして、3つの新しいファイルを追加します。
+プロジェクトファイルツリーを右クリックし、[**新しいフォルダー**] を選択します。 **モデル**名
+
+[**モデル**] フォルダーを右クリックして、3つの新しいファイルを追加します。
 
 - **Notification.cs**
 - **ResourceData.cs**
@@ -103,7 +105,7 @@ namespace msgraphapp
 }
 ```
 
-**Startup.cs**ファイルを開き、コンテンツを次のように置き換えます。
+**Startup.cs**ファイルを開きます。 メソッド`ConfigureServices()`メソッドを見つけ &、次のコードに置き換えます。
 
 ```csharp
 public void ConfigureServices(IServiceCollection services)
@@ -136,9 +138,9 @@ public void ConfigureServices(IServiceCollection services)
 
 次の変数を、前の手順でコピーした値に置き換えます。
 
-    - `<NGROK URL>`以前にコピーした https ngrok url に設定する必要があります。
-    - `<TENANT ID>`たとえば、Office 365 テナント id である必要があります。 **contoso.onmicrosoft.com**。
-    - `<APP ID>`、 `<APP SECRET>`アプリケーション登録の作成時に前にコピーしたアプリケーション id とシークレットである必要があります。
+- `<NGROK URL>`以前にコピーした https ngrok url に設定する必要があります。
+- `<TENANT ID>`Office 365 テナント id である必要があります。例: **contoso.onmicrosoft.com**。
+- `<APP ID>`、 `<APP SECRET>`アプリケーション登録の作成時に前にコピーしたアプリケーション id とシークレットである必要があります。
 
 ### <a name="add-notification-controller"></a>通知コントローラーの追加
 
@@ -146,7 +148,7 @@ public void ConfigureServices(IServiceCollection services)
 
 `Controllers`フォルダーを右クリックし、[**新しいファイル**] を選択して、コントローラーに**NotificationsController.cs**という名前を指定します。
 
-**NotificationController.cs**の内容を次のように置き換えます。
+**NotificationController.cs**の内容を次のコードに置き換えます。
 
 ```csharp
 using System;
@@ -244,23 +246,19 @@ namespace msgraphapp.Controllers
 
     private async Task<string> GetAccessToken()
     {
-        ClientCredential clientCredentials = new ClientCredential(secret: config.AppSecret);
+      IConfidentialClientApplication app = ConfidentialClientApplicationBuilder.Create(config.AppId)
+        .WithClientSecret(config.AppSecret)
+        .WithAuthority($"https://login.microsoftonline.com/{config.TenantId}")
+        .WithRedirectUri("https://daemon")
+        .Build();
 
-        var app = new ConfidentialClientApplication(
-            clientId: config.AppId,
-            authority: $"https://login.microsoftonline.com/{config.TenantId}",
-            redirectUri: "https://daemon",
-            clientCredential: clientCredentials,
-            userTokenCache: null,
-            appTokenCache: new TokenCache()
-        );
+      string[] scopes = new string[] { "https://graph.microsoft.com/.default" };
 
-        string[] scopes = new string[] { "https://graph.microsoft.com/.default" };
+      var result = await app.AcquireTokenForClient(scopes).ExecuteAsync();
 
-        var result = await app.AcquireTokenForClientAsync(scopes);
-
-        return result.AccessToken;
+      return result.AccessToken;
     }
+
   }
 }
 ```

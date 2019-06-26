@@ -16,7 +16,7 @@
 
 ## <a name="prerequisites"></a>前提条件
 
-このチュートリアルを開始する前に、開発用コンピューターに[.Net Core 2.2 SDK](https://dotnet.microsoft.com/download)と[Visual Studio コード](https://code.visualstudio.com/)をインストールしておく必要があります。 インストールされていない場合は、「ダウンロードオプション」の前のリンクを参照してください。
+このチュートリアルを開始する前に、開発用コンピューターに[.Net Core 2.2 SDK](https://dotnet.microsoft.com/download)と[Visual Studio コード](https://code.visualstudio.com/)をインストールしておく必要があります。 
 
 ## <a name="completed-exercises"></a>完了した演習
 
